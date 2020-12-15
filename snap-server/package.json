@@ -1,5 +1,5 @@
 {
-  "name": "api-snap",
+  "name": "snap-server",
   "version": "1.0.0",
   "description": "capture requst snapshot",
   "main": "src/ndex.js",
