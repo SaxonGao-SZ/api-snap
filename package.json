@@ -2,7 +2,7 @@
   "name": "api-snap",
   "version": "1.0.0",
   "description": "capture requst snapshot",
-  "main": "index.js",
+  "main": "src/ndex.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
