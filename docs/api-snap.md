@@ -6,12 +6,13 @@
 
 工作原理是：
 
-- 正常开发时，自动/手动录制下请求快照。
+- 正常开发时，通过原型注入的方式，自动录制请求快照。
+- 仅有 swagger 文档时，手动扫描文档并生成快照（需要精确提供定型的 swagger 文档）。
 - 离线开发时，由 whistle 把前端请求转发到快照服务，利用快照服务模拟 API 请求/返回。
 
 
 
-# 录制模式
+# 自动录制模式
 
 ```mermaid
 
@@ -27,9 +28,30 @@ XHR ->> bizServer: request
 bizServer ->> XHR: response
 XHR -->> snapAgents: request 拦截 URL、HEADER、queryStrng、formData、payLoad
 snapAgents ->> snapServe: Socket, request: responst
-snapServe ->> snapStorage: interface {[reqeust] : [response]}
+snapServe ->> snapStorage: request、response快照
 snapStorage ->> snapStorage: 生成并存储 API 快照、whistle 转发配置
 ```
+# API文档扫描模式
+
+```mermaid
+sequenceDiagram
+title: api-anap 工作原理-API文档扫描模式
+
+participant API文档
+participant snapScaner
+participant snapStorage
+
+API文档 ->> snapScaner: 扫描
+snapScaner ->> snapStorage: request、response快照
+snapStorage ->> snapStorage: 生成并存储 API 快照、whistle 转发配置
+
+
+```
+
+
+
+
+
 # 快照文件数据结构
 
 

@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+
+<head>
+  <style>
+    pre#dom-response {min-height: 200px; max-height: 30vh;overflow: auto; width: 90vw; border: 1px solid #333;}
+    textarea#dom-data {width: 90vw;height: 10vh;}
+    .red {color: red}
+  </style>
+</head>
+
+<body>
+  <div>
+    <ul>
+      <li> <input type="button" value="发送（CTR + Enter）" id="dom-request" /> </li>
+      <li>
+        <input value="" id="dom-url" placeholder="请求地址" />
+        <select id="dom-url-select">
+          <option value=''> - </option>
+          <option
+            value="https://jiaoyi.sina.com.cn/api/openapi_utf8.php/ZB_Room_Service.getTodayAllRoomList">
+            新浪财经（getTodayAllRoomList）
+          </option>
+          <option value="https://n.sinaimg.cn/finance/index-stock-https/js/radar.js">
+            新浪财经（radar.js）
+          </option>
+        </select>(SHIFT + J/K)
+      </li>
+      <li>
+        <select id="dom-method">
+          <option value="get">GET</option>
+          <option value="post">POST</option>
+        </select>(SHIFT + M 切换)
+      </li>
+      <li>
+        <h6>data</h6>
+        <textarea placeholder="参数" id="dom-data"></textarea>
+      </li>
+      <li>
+        <h6>response <label id="dom-error" style="color: red">Error!</label></h6>
+        <pre id="dom-response"></pre>
+      </li>
+    </ul>
+  </div>
+  <script src="../dist/snap-agent.js"></script>
+  <script src="./libs/axios.js"></script>
+  <script>
+
+    let domUrl = document.getElementById('dom-url');
+    let domUrlSelect = document.getElementById('dom-url-select');
+    let domMethod = document.getElementById('dom-method');
+    let domData = document.getElementById('dom-data');
+    let domResponse = document.getElementById('dom-response');
+    let domRequest = document.getElementById('dom-request');
+    let domError = document.getElementById('dom-error');
+    domError.style.display = 'none';
+    domData.value = JSON.stringify({
+      param1: 1,
+      param2: 'a',
+      param3: 0x1111
+    });
+
+    domUrlSelect.onchange = function () {
+      if (this.value === '') return;
+      domUrl.value = this.value;
+    }
+    domUrlSelect.changeNext = function () {
+      if (this.options.selectedIndex < (this.options.length - 1))
+        this.options.selectedIndex++;
+      else
+        this.options.selectedIndex = 0;
+      domUrl.value = this.value;
+    }
+    domUrlSelect.changePrev = function () {
+      if (this.options.selectedIndex > 0)
+        this.options.selectedIndex--;
+      else
+        this.options.selectedIndex = this.options.length - 1;
+      domUrl.value = this.value;
+    }
+
+
+    domMethod.changeNext = function() {
+      if (this.options.selectedIndex < (this.options.length - 1))
+        this.options.selectedIndex++;
+      else
+        this.options.selectedIndex = 0;
+    }
+
+    nextUrl = function () {
+      domUrlSelect.options.selectedIndex
+    }
+
+    class RequestParam {
+      url = '';
+      method = '';
+      data = {};
+      params = {};
+      withCredentials = true;
+      constructor() {
+        this.url = domUrl.value;
+        this.method = domMethod.value;
+        let data = domData.value.length>0 ? JSON.parse( domData.value) : {};
+        if (this.method === 'get') {
+          this.params = data
+        } else {
+          this.data = data;
+        }
+      }
+    }
+
+    let request = function () {
+      let param = new RequestParam();
+      console.log('request/param', param)
+      axios.request(param)
+        .then(rsp => {
+          domResponse.innerText = rsp.data;
+          domResponse.className = '';
+          domError.style.display = 'none'
+        })
+        .catch(rsp => {
+          domError.style.display = 'inline-block'
+          domResponse.className = 'red';
+          domResponse.innerText = `${rsp.stack || ''}`;
+        })
+    }
+
+    document.body.onload = function () {
+      apiSnapAgent();
+      domRequest.onclick = request;
+
+      this.onkeypress = function (event) {
+        if ( event.ctrlKey === true && event.keyCode === 10 ) {
+          request();
+        }
+        if ( event.shiftKey === true && event.keyCode === 10) {
+          request();
+        }
+
+
+        if (event.shiftKey === true && event.keyCode === 74) {
+          domUrlSelect.changeNext();
+        }
+        if (event.shiftKey === true && event.keyCode === 75) {
+          domUrlSelect.changeNext();
+        }
+
+        if (event.key === 'M') {
+          domMethod.changeNext();
+        }
+        
+      }
+    }
+  </script>
+</body>
+
+</html>

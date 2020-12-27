@@ -1,0 +1,36 @@
+{
+  "name": "api-snap",
+  "version": "1.0.0",
+  "description": "在没有服务端开发者支持的情况下，前端开发者仍可以进行离线开发。",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run watch\" \"npm run server-start\"",
+    "watch": "node_modules/.bin/rollup -w -c  ./scripts/snap-agent.rollu-dev.js",
+    "server-start": "node_modules/.bin/http-server ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaxonGao-SZ/api-snap.git"
+  },
+  "author": "saxongao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SaxonGao-SZ/api-snap/issues"
+  },
+  "homepage": "https://github.com/SaxonGao-SZ/api-snap#readme",
+  "devDependencies": {
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "concurrently": "^5.3.0",
+    "http-server": "^0.12.3",
+    "rollup": "^2.35.1"
+  },
+  "dependencies": {}
+}
