@@ -13,17 +13,15 @@
   <div>
     <ul>
       <li> <input type="button" value="发送（CTR + Enter）" id="dom-request" /> </li>
+      <li>  </li>
       <li>
-        <input value="" id="dom-url" placeholder="请求地址" />
+        <input value="./" id="dom-url" placeholder="请求地址" />
         <select id="dom-url-select">
-          <option value=''> - </option>
-          <option
-            value="https://jiaoyi.sina.com.cn/api/openapi_utf8.php/ZB_Room_Service.getTodayAllRoomList">
-            新浪财经（getTodayAllRoomList）
-          </option>
-          <option value="https://n.sinaimg.cn/finance/index-stock-https/js/radar.js">
-            新浪财经（radar.js）
-          </option>
+          <option value="./" selected> ./ </option>
+          <option value="../runtime/state.json"> state.json </option>
+          <option value="../runtime/test1.json"> test1.json </option>
+          <option value="../runtime/test2.json"> test2.json </option>
+          <option value="../runtime/test3.json"> test3.json </option>
         </select>(SHIFT + J/K)
       </li>
       <li>
@@ -35,6 +33,10 @@
       <li>
         <h6>data</h6>
         <textarea placeholder="参数" id="dom-data"></textarea>
+      </li>
+      <li>
+        <h6>request</h6>
+        <pre id="dom-request-option"></pre>
       </li>
       <li>
         <h6>response <label id="dom-error" style="color: red">Error!</label></h6>
@@ -52,6 +54,7 @@
     let domData = document.getElementById('dom-data');
     let domResponse = document.getElementById('dom-response');
     let domRequest = document.getElementById('dom-request');
+    let domRequestOption = document.getElementById('dom-request-option');
     let domError = document.getElementById('dom-error');
     domError.style.display = 'none';
     domData.value = JSON.stringify({
@@ -92,10 +95,10 @@
     }
 
     class RequestParam {
-      url = '';
-      method = '';
-      data = {};
-      params = {};
+      url = ''; // 请求地址，不包含 queryString
+      method = ''; // 请求方法，比如 GET、POST
+      data = null; // 请求数据 ,  payload 和 fromData
+      params = null; // 请求数据，queryString
       withCredentials = true;
       constructor() {
         this.url = domUrl.value;
@@ -116,13 +119,17 @@
         .then(rsp => {
           domResponse.innerText = rsp.data;
           domResponse.className = '';
-          domError.style.display = 'none'
+          domError.style.display = 'none';
         })
         .catch(rsp => {
           domError.style.display = 'inline-block'
           domResponse.className = 'red';
           domResponse.innerText = `${rsp.stack || ''}`;
         })
+    }
+
+    let recurseRequestOption = function() {
+
     }
 
     document.body.onload = function () {
@@ -151,6 +158,7 @@
         
       }
     }
+
   </script>
 </body>
 

@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "pwa-chrome",
+            "name": "http://127.0.0.1:9334",
+            "request": "launch",
+            "program": "${workspaceFolder}\\index.js"
+        }
+    ]
+}

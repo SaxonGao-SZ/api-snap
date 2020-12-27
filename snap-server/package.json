@@ -2,9 +2,10 @@
   "name": "snap-server",
   "version": "1.0.0",
   "description": "capture requst snapshot",
-  "main": "src/ndex.js",
+  "main": "index.mjs",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./index.js"
   },
   "repository": {
     "type": "git",
